@@ -70,6 +70,10 @@ public class City {
         this.pm25 = pm25;
     }
 
+    public City() {
+
+    }
+
     public Long getId() {
         return id;
     }
