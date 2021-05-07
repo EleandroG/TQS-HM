@@ -9,12 +9,14 @@ public class Cache {
 
     private HashMap<Long, City> cache;
     private HashMap<Long, Calendar> timeToLive;
+    private Integer requests;
     private Integer hits;
     private Integer misses;
 
     public Cache() {
         cache = new HashMap<>();
         timeToLive = new HashMap<>();
+        requests = 0;
         hits = 0;
         misses = 0;
     }
@@ -26,7 +28,7 @@ public class Cache {
     public void setCache(City city) {
         setTimeToLive(city.getId());
         cache.put(city.getId(), city);
-        System.out.println("Cidade adicionada: " + cache + "\n com um TimeToLive: " + timeToLive.get(city.getId()).getTime());
+        System.out.println("Cidade adicionada: " + cache + "\n com um Time To Live de: " + timeToLive.get(city.getId()).getTime());
     }
 
     public HashMap<Long, Calendar> getTimeToLive() {
@@ -37,6 +39,14 @@ public class Cache {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 1);
         timeToLive.put(id, calendar);
+    }
+
+    public Integer getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Integer requests) {
+        this.requests = requests;
     }
 
     public Integer getHits() {
@@ -63,6 +73,10 @@ public class Cache {
         misses++;
     }
 
+    public void incrementRequests() {
+        requests++;
+    }
+
     @Override
     public String toString() {
         return "Cache{" +
@@ -70,6 +84,7 @@ public class Cache {
                 ", timeToLive=" + timeToLive +
                 ", hits=" + hits +
                 ", misses=" + misses +
+                ", requests=" + requests +
                 '}';
     }
 }
