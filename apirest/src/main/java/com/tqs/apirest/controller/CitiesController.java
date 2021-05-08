@@ -6,48 +6,79 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tqs.apirest.cache.Cache;
 import com.tqs.apirest.model.Cities;
 import com.tqs.apirest.repository.CitiesRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
+@RestController
 public class CitiesController {
-
-    Cache cache = new Cache();
+    @Autowired
     CitiesRepository citiesRepository;
-    public static int stats = 0;
 
+    Cache cacheManager = new Cache();
+
+    public static int ApiStats = 0;
+
+    // get all infos from bd
     @GetMapping("/cities")
-    public List<Cities> getCities() {
-        incrementStatsCount();
+    public List<Cities> getAllCities() {
+        incrementApiCount();
         return citiesRepository.findAll();
     }
 
+    // add a new city: Used for dev and tests by posting through postman
     @PostMapping("/cities")
     public Cities newCity (@Valid @RequestBody Cities cities){
-        incrementStatsCount();
+        incrementApiCount();
         return citiesRepository.save(cities);
     }
 
-    //Get data from the API
+    // TODO:
+    // - add miss e hits count
+    // - add TTL
+    @GetMapping("/cities/{idx}")
+    public Cities getCitiesById (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
+        // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
+        incrementApiCount();
+        if (citiesRepository.findTopByIdxOrderByIdgeratedDesc(idx) == null || cacheManager.cachenotValid(idx)){
+            cacheManager.incrementCacheMiss();
+
+            // Se o pedido for Lisboa
+            Cities retrieve_api;
+            if (idx == 8379){
+                retrieve_api = getCityFromApi("Lisbon");
+
+                cacheManager.setCitiesCache(retrieve_api);
+            } // Se o pedido for Madrid
+            else { // Madrid: 5725
+                retrieve_api = getCityFromApi("Madrid");
+                cacheManager.setCitiesCache(retrieve_api);
+            }
+            System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
+            return retrieve_api;
+
+        } else {
+            cacheManager.incrementCacheHit();
+            System.out.println("-> HIT, esta em cache e TTL válido!");
+            // Vai busca-lo mesmo a cache
+            return cacheManager.getCityCachedById(idx);
+        }
+    }
+
+    // Call the external api and then save to model
     @GetMapping("/api/{city}")
-    public Cities getAPIData(@PathVariable(value = "city") String city) throws JsonProcessingException {
-        final String uri = "https://api.waqi.info/feed/" + city + "/?token=1c26216b610f536bd4c9b745e9372912ff8fe97d";
-
-        //HTTP Requests on client side
+    public Cities getCityFromApi(@PathVariable(value = "city") String city) throws JsonProcessingException {
+        final String uri = "https://api.waqi.info/feed/"+city+"/?token=41b33a02bd2d16e5f587310917b819e826cdbb58";
         RestTemplate restTemplate = new RestTemplate();
-        String result = restTemplate.getForObject(uri, String.class);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
+        String result = restTemplate.getForObject(uri, String.class);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -71,25 +102,25 @@ public class CitiesController {
         HashMap pm10_map = (HashMap) iaqi_map.get("pm10");
         Double pm10 = Double.parseDouble(pm10_map.get("v").toString()); //PM 10
 
-        HashMap o3_map = (HashMap) iaqi_map.get("ozone");
+        HashMap o3_map = (HashMap) iaqi_map.get("o3");
         Double o3 = Double.parseDouble(o3_map.get("v").toString());   //Ozono
 
-        HashMap no2_map = (HashMap) iaqi_map.get("nitrogenDioxide");
+        HashMap no2_map = (HashMap) iaqi_map.get("no2");
         Double no2 = Double.parseDouble(no2_map.get("v").toString()); //Dióxido de nitrogénio
 
-        HashMap so2_map = (HashMap) iaqi_map.get("sulfurDioxide");
+        HashMap so2_map = (HashMap) iaqi_map.get("so2");
         Double so2 = Double.parseDouble(so2_map.get("v").toString()); //Dióxido de enxofre
 
-        HashMap t_map = (HashMap) iaqi_map.get("temperature");
+        HashMap t_map = (HashMap) iaqi_map.get("t");
         Double t = Double.parseDouble(t_map.get("v").toString());    //Temperature
 
-        HashMap p_map = (HashMap) iaqi_map.get("pressure");
+        HashMap p_map = (HashMap) iaqi_map.get("p");
         Double p = Double.parseDouble(p_map.get("v").toString());
 
-        HashMap h_map = (HashMap) iaqi_map.get("humidity");
+        HashMap h_map = (HashMap) iaqi_map.get("h");
         Double h= Double.parseDouble(h_map.get("v").toString());     //Humidity
 
-        HashMap w_map = (HashMap) iaqi_map.get("wind");
+        HashMap w_map = (HashMap) iaqi_map.get("w");
         Double w= Double.parseDouble(w_map.get("v").toString());
 
         //System.out.println("idx: "+idx+", name: " +  name +", timestamp: " +timestamp+", aqi: "+ aqi+", pm25: " +pm25+", pm10: "+ pm10+", o3: "+o3+", no2: " +no2+ ", so2"+ so2+ ", t"+ t+", p: "+ p+ ", h: "+ h+", w: " +w);
@@ -98,55 +129,23 @@ public class CitiesController {
         citiesRepository.save(cities);
 
         //System.out.println(cities);
-        incrementStatsCount();
+        incrementApiCount();
         return cities;
     }
 
-    @GetMapping("/city/{id}")
-    public Cities getCitiesById (@PathVariable(value = "id") Long id) throws JsonProcessingException {
-        // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
-        incrementStatsCount();
-        if (citiesRepository.findTopByIdOrderByIdDesc(id) == null || cache.isCache(id)){
-            cache.incrementMisses();
-
-            //Porto
-            Cities api;
-
-            if (id == 8373) {
-                api = getAPIData("Porto");
-                cache.setCache(api);
-            } // Se o pedido for Madrid
-            else { // Madrid: 5725
-                api = getAPIData("Madrid");
-                cache.setCache(api);
-            }
-            System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
-            return api;
-
-        } else {
-            cache.incrementHits();
-            System.out.println("-> HIT, esta em cache e TTL válido!");
-            // Vai busca-lo mesmo a cache
-            return cache.getCityCachedById(id);
-        }
-    }
-
-    @GetMapping("/api/requests")
-    public String getRequests(){
-        return "Requests: " + cache.getRequests();
-    }
-
+    // Return the number of calls to my api
     @GetMapping("/api/stats")
-    public String getStats(){
-        return "Stats: " + stats;
+    public String getApiStats(){
+        return "Calls to Api on this session: "+ ApiStats;
     }
 
     @GetMapping("/cache")
-    public String Cache(){
-        return cache.toString();
+    public String returnCache(){
+        return cacheManager.toString();
     }
 
-    public void incrementStatsCount(){
-        stats++;
+    public void incrementApiCount(){
+        ApiStats++;
     }
+
 }

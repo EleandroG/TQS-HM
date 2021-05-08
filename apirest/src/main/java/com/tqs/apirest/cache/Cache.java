@@ -6,101 +6,76 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class Cache {
-
-    private HashMap<Long, Cities> cache;
-    private HashMap<Long, Calendar> timeToLive;
-    private Integer requests;
-    private Integer hits;
-    private Integer misses;
+    private Integer cache_hit;
+    private Integer cache_miss;
+    private HashMap<Long, Calendar> TTL;
+    private HashMap<Long, Cities> cities_cache;
 
     public Cache() {
-        cache = new HashMap<>();
-        timeToLive = new HashMap<>();
-        requests = 0;
-        hits = 0;
-        misses = 0;
+        cache_miss = 0;
+        cache_hit = 0;
+        TTL = new HashMap<>();
+        cities_cache = new HashMap<>();
     }
 
-    public HashMap<Long, Cities> getCache() {
-        return cache;
+    public void incrementCacheHit() {
+        cache_hit++;
     }
 
-    public Cities getCityCachedById(Long id){
-        return cache.get(id);
+    public void incrementCacheMiss() {
+        cache_miss++;
     }
 
-    public void setCache(Cities city) {
-        setTimeToLive(city.getId());
-        cache.put(city.getId(), city);
-        System.out.println("Cidade adicionada: " + cache + "\n com um Time To Live de: " + timeToLive.get(city.getId()).getTime());
+    public void setTTL(Long id) {
+        Calendar current_time = Calendar.getInstance();
+        current_time.add(Calendar.MINUTE, 1);
+        TTL.put(id, current_time);
     }
 
-    public HashMap<Long, Calendar> getTimeToLive() {
-        return timeToLive;
+    public void setCitiesCache(Cities city) {
+        cities_cache.put(city.getIdx(), city);
+        setTTL(city.getIdx());
+        //System.out.println("CITIES CACHE HASHMAP: " + cities_cache);
+        System.out.println("CITI ADDED: " + cities_cache + "\nWITH TTL: " + TTL.get(city.getIdx()).getTime());
     }
 
-    public void setTimeToLive(Long id) {
-        Calendar calendar_time = Calendar.getInstance();
-        calendar_time.add(Calendar.MINUTE, 1);
-        timeToLive.put(id, calendar_time);
+    public HashMap<Long, Cities> getCitiesCache() {
+        return cities_cache;
     }
 
-    public Integer getRequests() {
-        return requests;
+    public Cities getCityCachedById(Long idx){
+        return cities_cache.get(idx);
     }
 
-    public void setRequests(Integer requests) {
-        this.requests = requests;
-    }
-
-    public Integer getHits() {
-        return hits;
-    }
-
-    public void setHits(Integer hits) {
-        this.hits = hits;
-    }
-
-    public Integer getMisses() {
-        return misses;
-    }
-
-    public void setMisses(Integer misses) {
-        this.misses = misses;
-    }
-
-    public void incrementHits() {
-        hits++;
-    }
-
-    public void incrementMisses() {
-        misses++;
-    }
-
-    public void incrementRequests() {
-        requests++;
-    }
-
-    //Method to see if the cache exists
-    public boolean isCache(Long id){
-        Calendar calendar_time = Calendar.getInstance();
-
-        if (calendar_time.before(timeToLive.get(id)) || calendar_time.equals(timeToLive.get(id))){
-            System.out.println("Cache: " + cache.get(id).getName() + "\n\t with a Time To Live: " + timeToLive.get(id).getTime());
+    public boolean cachenotValid(Long idx){
+        Calendar current_time = Calendar.getInstance();
+        //System.out.println("TTL HASHMAP: " + TTL.values());
+        if (current_time.before(TTL.get(idx)) || current_time.equals(TTL.get(idx))){
+            System.out.println("-- CACHE TTL VALID: " + cities_cache.get(idx).getName() + "\n\tTTL Value: " + TTL.get(idx).getTime());
             return false;
+        } else if (current_time.after(TTL.get(idx))){
+            System.out.println("-- CACHE TTL NOT VALID: " + cities_cache.get(idx).getName() + "\n\tTTL Value: " + TTL.get(idx).getTime());
+            return true;
         } else {
             return true;
         }
     }
 
+    public Integer getCacheHit() {
+        return cache_hit;
+    }
+
+    public Integer getCacheMiss() {
+        return cache_miss;
+    }
+
     @Override
     public String toString() {
-        return "Cache{" +
-                "cache=" + cache +
-                ", timeToLive=" + timeToLive +
-                ", hits=" + hits +
-                ", misses=" + misses +
-                ", requests=" + requests +
+        return "CacheManager{" +
+                "\ncache_hit=" + cache_hit +
+                ", \ncache_miss=" + cache_miss +
+                ", \nTTL=" + TTL +
+                ", \ncities_cache=" + cities_cache +
                 '}';
     }
 }

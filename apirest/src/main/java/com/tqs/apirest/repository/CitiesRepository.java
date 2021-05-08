@@ -6,8 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CitiesRepository extends JpaRepository<Cities, Long> {
-
-    Cities findById(long id);
-    Cities findTopByIdOrderByIdDesc(Long id);
-
+    Cities findByIdx(long idx);
+    Cities findTopByIdxOrderByIdgeratedDesc(long idx);
 }
+

@@ -15,21 +15,21 @@
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" style="font-size:25px; font-height: bold;" th:href="@{/}">AirQuality <i class="fas fa-air-freshener"></i> WebApp </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <a class="navbar-brand" style="font-size:25px; font-height: bold;" th:href="@{/}">AirQuality <i class="fas fa-air-freshener"></i> WebApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" th:href="@{/}">Lisbon <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/madrid}">Madrid</a>
-      </li>
-    </ul>
-  </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/}">Lisbon <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/madrid}">Madrid</a>
+            </li>
+        </ul>
+    </div>
 </nav>
 
 <!-- Page Content -->
@@ -49,19 +49,19 @@
                 <div class="card-body">
                     <h3 class="card-title">Station: <span th:text="${info.getName()}">-</span></h3>
                     <p class="card-text">
-                        <ul>
-                            <li><b>AQI: </b><span th:text="${info.getAirQuality()}">-</span></li>
-                            <li><b>PM2.5: </b><span th:text="${info.getPm25()}">-</span></li>
-                            <li><b>PM10: </b><span th:text="${info.getPm10()}">-</span></li>
-                            <li><b>O3: </b><span th:text="${info.getOzone()}">-</span></li>
-                            <li><b>NO2: </b><span th:text="${info.getNitrogenDioxide()}">-</span></li>
-                            <li><b>SO2: </b><span th:text="${info.getSulfurDioxide()}">-</span></li>
-                            <li><b>Temperature: </b><span th:text="${info.getTemperature()}">-</span></li>
-                            <li><b>Pressure: </b><span th:text="${info.getPressure()}">-</span></li>
-                            <li><b>Humidity: </b><span th:text="${info.getHumidity()}">-</span></li>
-                            <li><b>Wind: </b><span th:text="${info.getWind()}">-</span></li>
-                            <li><b><i>Measure timestamp: </i></b><span th:text="${info.getTimestamp()}">-</span></li>
-                        </ul>
+                    <ul>
+                        <li><b>AQI: </b><span th:text="${info.getAqi()}">-</span></li>
+                        <li><b>PM2.5: </b><span th:text="${info.getPm25()}">-</span></li>
+                        <li><b>PM10: </b><span th:text="${info.getPm10()}">-</span></li>
+                        <li><b>O3: </b><span th:text="${info.getO3()}">-</span></li>
+                        <li><b>NO2: </b><span th:text="${info.getNo2()}">-</span></li>
+                        <li><b>SO2: </b><span th:text="${info.getSo2()}">-</span></li>
+                        <li><b>Temperature: </b><span th:text="${info.getT()}">-</span></li>
+                        <li><b>Pressure: </b><span th:text="${info.getP()}">-</span></li>
+                        <li><b>Humidity: </b><span th:text="${info.getH()}">-</span></li>
+                        <li><b>Wind: </b><span th:text="${info.getW()}">-</span></li>
+                        <li><b><i>Measure timestamp: </i></b><span th:text="${info.getTimestamp()}">-</span></li>
+                    </ul>
                     </p>
                 </div>
             </div>
