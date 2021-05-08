@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity(name="cities")
 @Table(name="city")
-public class City {
+public class Cities {
 
     //Cidade
 
@@ -52,9 +52,9 @@ public class City {
     @Column(nullable = true)
     private Double pm25;
 
-    public City(Long id, String name, String timestamp, Double airQuality, Double temperature, Double humidity,
-                Double wind, Double pressure, Double ozone, Double nitrogenDioxide, Double sulfurDioxide, Double pm10,
-                Double pm25) {
+    public Cities(Long id, String name, String timestamp, Double airQuality, Double temperature, Double humidity,
+                  Double wind, Double pressure, Double ozone, Double nitrogenDioxide, Double sulfurDioxide, Double pm10,
+                  Double pm25) {
         this.id = id;
         this.name = name;
         this.timestamp = timestamp;
@@ -70,7 +70,7 @@ public class City {
         this.pm25 = pm25;
     }
 
-    public City() {
+    public Cities() {
 
     }
 
@@ -128,7 +128,7 @@ public class City {
 
     @Override
     public String toString() {
-        return "City{" +
+        return "Cities{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", timestamp='" + timestamp + '\'' +

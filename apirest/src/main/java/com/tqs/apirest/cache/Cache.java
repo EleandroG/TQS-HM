@@ -1,13 +1,13 @@
 package com.tqs.apirest.cache;
 
-import com.tqs.apirest.model.City;
+import com.tqs.apirest.model.Cities;
 
 import java.util.Calendar;
 import java.util.HashMap;
 
 public class Cache {
 
-    private HashMap<Long, City> cache;
+    private HashMap<Long, Cities> cache;
     private HashMap<Long, Calendar> timeToLive;
     private Integer requests;
     private Integer hits;
@@ -21,11 +21,15 @@ public class Cache {
         misses = 0;
     }
 
-    public HashMap<Long, City> getCache() {
+    public HashMap<Long, Cities> getCache() {
         return cache;
     }
 
-    public void setCache(City city) {
+    public Cities getCityCachedById(Long id){
+        return cache.get(id);
+    }
+
+    public void setCache(Cities city) {
         setTimeToLive(city.getId());
         cache.put(city.getId(), city);
         System.out.println("Cidade adicionada: " + cache + "\n com um Time To Live de: " + timeToLive.get(city.getId()).getTime());
@@ -36,9 +40,9 @@ public class Cache {
     }
 
     public void setTimeToLive(Long id) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 1);
-        timeToLive.put(id, calendar);
+        Calendar calendar_time = Calendar.getInstance();
+        calendar_time.add(Calendar.MINUTE, 1);
+        timeToLive.put(id, calendar_time);
     }
 
     public Integer getRequests() {
@@ -75,6 +79,18 @@ public class Cache {
 
     public void incrementRequests() {
         requests++;
+    }
+
+    //Method to see if the cache exists
+    public boolean isCache(Long id){
+        Calendar calendar_time = Calendar.getInstance();
+
+        if (calendar_time.before(timeToLive.get(id)) || calendar_time.equals(timeToLive.get(id))){
+            System.out.println("Cache: " + cache.get(id).getName() + "\n\t with a Time To Live: " + timeToLive.get(id).getTime());
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
