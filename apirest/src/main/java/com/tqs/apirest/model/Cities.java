@@ -46,7 +46,7 @@ public class Cities {
     private Double temperature;     //Temperature
 
     @Column(nullable=true, unique=false)
-    private Double p;     //Pressure
+    private Double pressure;     //Pressure
 
     @Column(nullable=true, unique=false)
     private Double h;     //Humidity
@@ -54,7 +54,7 @@ public class Cities {
     @Column(nullable=true, unique=false)
     private Double w;     //Wind
 
-    public Cities(Long idx, String name, String timestamp, Double aqi, Double pm25, Double pm10, Double o3, Double no2, Double so2, Double temperature, Double p, Double h, Double w) {
+    public Cities(Long idx, String name, String timestamp, Double aqi, Double pm25, Double pm10, Double o3, Double no2, Double so2, Double temperature, Double pressure, Double h, Double w) {
         this.idx = idx;
         this.name = name;
         this.timestamp = timestamp;
@@ -65,7 +65,7 @@ public class Cities {
         this.no2 = no2;
         this.so2 = so2;
         this.temperature = temperature;
-        this.p = p;
+        this.pressure = pressure;
         this.h = h;
         this.w = w;
     }
@@ -116,8 +116,8 @@ public class Cities {
         return temperature;
     }
 
-    public Double getP() {
-        return p;
+    public Double getPressure() {
+        return pressure;
     }
 
     public Double getH() {
@@ -142,7 +142,7 @@ public class Cities {
                 ", no2=" + no2 +
                 ", so2=" + so2 +
                 ", temperature=" + temperature +
-                ", p=" + p +
+                ", p=" + pressure +
                 ", h=" + h +
                 ", w=" + w +
                 '}';
