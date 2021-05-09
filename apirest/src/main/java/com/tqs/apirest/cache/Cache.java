@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class Cache {
-    
+
     private HashMap<Long, Cities> cache;
     private Integer hits;
     private Integer misses;
@@ -41,6 +41,27 @@ public class Cache {
         return timeToLive;
     }
 
+    public HashMap<Long, Cities> getCitiesCache() {
+        return cache;
+    }
+
+    public Cities getCityCachedById(Long idx){
+        return cache.get(idx);
+    }
+
+    public void setTimeToLive(Long id) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 1);
+        timeToLive.put(id, calendar);
+    }
+
+    public void setCache(Cities city) {
+        cache.put(city.getIdx(), city);
+        setTimeToLive(city.getIdx());
+
+        System.out.println("CITI ADDED: " + cache + "\nWITH timeToLive: " + timeToLive.get(city.getIdx()).getTime());
+    }
+
     public void incrementHits() {
         hits++;
     }
@@ -53,31 +74,10 @@ public class Cache {
         requests++;
     }
 
-    public void setTimeToLive(Long id) {
-        Calendar current_time = Calendar.getInstance();
-        current_time.add(Calendar.MINUTE, 1);
-        timeToLive.put(id, current_time);
-    }
+    public boolean isCache(Long idx){
+        Calendar calendar = Calendar.getInstance();
 
-    public void setCache(Cities city) {
-        cache.put(city.getIdx(), city);
-        setTimeToLive(city.getIdx());
-        //System.out.println("CITIES CACHE HASHMAP: " + cache);
-        System.out.println("CITI ADDED: " + cache + "\nWITH timeToLive: " + timeToLive.get(city.getIdx()).getTime());
-    }
-
-    public HashMap<Long, Cities> getCitiesCache() {
-        return cache;
-    }
-
-    public Cities getCityCachedById(Long idx){
-        return cache.get(idx);
-    }
-
-    public boolean cachenotValid(Long idx){
-        Calendar current_time = Calendar.getInstance();
-        //System.out.println("timeToLive HASHMAP: " + timeToLive.values());
-        if (current_time.before(timeToLive.get(idx)) || current_time.equals(timeToLive.get(idx))){
+        if (calendar.before(timeToLive.get(idx)) || calendar.equals(timeToLive.get(idx))){
             System.out.println("-- CACHE timeToLive VALID: " + cache.get(idx).getName() + "\n\ttimeToLive Value: " + timeToLive.get(idx).getTime());
             return false;
         } else {

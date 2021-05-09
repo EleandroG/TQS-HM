@@ -46,7 +46,7 @@ public class CitiesController {
     public Cities getCitiesById (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
         // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
         incrementApiCount();
-        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cacheManager.cachenotValid(idx)){
+        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cacheManager.isCache(idx)){
             cacheManager.incrementMisses();
 
             // Se o pedido for Lisboa
@@ -74,7 +74,7 @@ public class CitiesController {
     // Call the external api and then save to model
     @GetMapping("/api/{city}")
     public Cities getCityFromApi(@PathVariable(value = "city") String city) throws JsonProcessingException {
-        final String uri = "https://api.waqi.info/feed/"+city+"/?token=41b33a02bd2d16e5f587310917b819e826cdbb58";
+        final String uri = "https://api.waqi.info/feed/" + city + "/?token=1c26216b610f536bd4c9b745e9372912ff8fe97d";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
