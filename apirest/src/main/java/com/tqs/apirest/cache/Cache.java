@@ -59,7 +59,7 @@ public class Cache {
         cache.put(city.getIdx(), city);
         setTimeToLive(city.getIdx());
 
-        System.out.println("CITI ADDED: " + cache + "\nWITH timeToLive: " + timeToLive.get(city.getIdx()).getTime());
+        System.out.println("Cidade: " + cache + "\nTime To Live: " + timeToLive.get(city.getIdx()).getTime());
     }
 
     public void incrementHits() {
@@ -74,6 +74,7 @@ public class Cache {
         requests++;
     }
 
+    //Method to confirm if this is a cache of a city | region | station
     public boolean isCache(Long idx){
         Calendar calendar = Calendar.getInstance();
 
