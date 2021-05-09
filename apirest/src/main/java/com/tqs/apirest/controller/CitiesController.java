@@ -84,7 +84,7 @@ public class CitiesController {
                 temperature, humidity, pressure, wind);
         citiesRepository.save(cities);
 
-        
+
         incrementStats();
         return cities;
     }
@@ -93,7 +93,7 @@ public class CitiesController {
     public Cities citiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
         incrementRequests();
         incrementStats();
-        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
+        if (citiesRepository.findByIdx(idx) == null || cache.isCache(idx)){
             cache.incrementRequests();
             cache.incrementMisses();
 
