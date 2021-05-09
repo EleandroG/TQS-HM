@@ -18,26 +18,13 @@ import java.util.List;
 
 @RestController
 public class CitiesController {
+    
     @Autowired
     CitiesRepository citiesRepository;
-
-    Cache cacheManager = new Cache();
+    Cache cache = new Cache();
 
     public static int ApiStats = 0;
 
-    // get all infos from bd
-    @GetMapping("/cities")
-    public List<Cities> getAllCities() {
-        incrementApiCount();
-        return citiesRepository.findAll();
-    }
-
-    // add a new city: Used for dev and tests by posting through postman
-    @PostMapping("/cities")
-    public Cities newCity (@Valid @RequestBody Cities cities){
-        incrementApiCount();
-        return citiesRepository.save(cities);
-    }
 
     // TODO:
     // - add miss e hits count
@@ -46,28 +33,28 @@ public class CitiesController {
     public Cities getCitiesById (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
         // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
         incrementApiCount();
-        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cacheManager.isCache(idx)){
-            cacheManager.incrementMisses();
+        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
+            cache.incrementMisses();
 
             // Se o pedido for Lisboa
             Cities retrieve_api;
             if (idx == 8379){
                 retrieve_api = getCityFromApi("Lisbon");
 
-                cacheManager.setCache(retrieve_api);
+                cache.setCache(retrieve_api);
             } // Se o pedido for Madrid
             else { // Madrid: 5725
                 retrieve_api = getCityFromApi("Madrid");
-                cacheManager.setCache(retrieve_api);
+                cache.setCache(retrieve_api);
             }
             System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
             return retrieve_api;
 
         } else {
-            cacheManager.incrementHits();
+            cache.incrementHits();
             System.out.println("-> HIT, esta em cache e TTL válido!");
             // Vai busca-lo mesmo a cache
-            return cacheManager.getCityCachedById(idx);
+            return cache.getCityCachedById(idx);
         }
     }
 
@@ -141,7 +128,7 @@ public class CitiesController {
 
     @GetMapping("/cache")
     public String returnCache(){
-        return cacheManager.toString();
+        return cache.toString();
     }
 
     public void incrementApiCount(){
