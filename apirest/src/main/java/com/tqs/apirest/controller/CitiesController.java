@@ -31,16 +31,12 @@ public class CitiesController {
     public Cities getCityFromApi(@PathVariable(value = "city") String city) throws JsonProcessingException {
         final String uri = "https://api.waqi.info/feed/" + city + "/?token=1c26216b610f536bd4c9b745e9372912ff8fe97d";
 
-        //
+        //HTTP requests on the client side
         RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
         String result = restTemplate.getForObject(uri, String.class);
 
+        //Reading JSON
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         HashMap infos = mapper.readValue(result, HashMap.class);
         HashMap data = (HashMap) infos.get("data");
@@ -48,47 +44,46 @@ public class CitiesController {
         //System.out.println(data);
 
         HashMap city_map = (HashMap) data.get("city");
-        HashMap time_map = (HashMap) data.get("time");
-        HashMap iaqi_map = (HashMap) data.get("iaqi");
+        HashMap time = (HashMap) data.get("time");
+        HashMap iaqi = (HashMap) data.get("iaqi");
 
-        Long idx = Long.parseLong(data.get("idx").toString()); //Unique ID for the city monitoring station.
-        String name = city_map.get("name").toString(); //Name of the monitoring station.
-        String timestamp = time_map.get("s").toString(); //Tempo da leitura
-        Double aqi = Double.parseDouble(data.get("aqi").toString()); //Real-time air quality information.
+        Long idx = Long.parseLong(data.get("idx").toString());          //ID for the city | region | station
+        String name = city_map.get("name").toString();                  //Name of city | region | station
+        String timestamp = time.get("s").toString();                    //Timestamp
+        Double aqi = Double.parseDouble(data.get("aqi").toString());    //Air Quality Information
 
-        HashMap pm25_map = (HashMap) iaqi_map.get("pm25");
-        Double pm25 = Double.parseDouble(pm25_map.get("v").toString()); //PM 2.5
 
-        HashMap pm10_map = (HashMap) iaqi_map.get("pm10");
-        Double pm10 = Double.parseDouble(pm10_map.get("v").toString()); //PM 10
+        HashMap no2_map = (HashMap) iaqi.get("no2");
+        Double nitrogenDioxide = Double.parseDouble(no2_map.get("v").toString());   //Dióxido de nitrogénio
 
-        HashMap o3_map = (HashMap) iaqi_map.get("o3");
-        Double o3 = Double.parseDouble(o3_map.get("v").toString());   //Ozono
+        HashMap so2_map = (HashMap) iaqi.get("so2");
+        Double sulfurDioxide = Double.parseDouble(so2_map.get("v").toString());     //Dióxido de enxofre
 
-        HashMap no2_map = (HashMap) iaqi_map.get("no2");
-        Double no2 = Double.parseDouble(no2_map.get("v").toString()); //Dióxido de nitrogénio
+        HashMap o3_map = (HashMap) iaqi.get("o3");
+        Double ozone = Double.parseDouble(o3_map.get("v").toString());              //Ozono
 
-        HashMap so2_map = (HashMap) iaqi_map.get("so2");
-        Double so2 = Double.parseDouble(so2_map.get("v").toString()); //Dióxido de enxofre
+        HashMap pm25_map = (HashMap) iaqi.get("pm25");
+        Double pm25 = Double.parseDouble(pm25_map.get("v").toString());             //PM 2.5
 
-        HashMap t_map = (HashMap) iaqi_map.get("t");
-        Double t = Double.parseDouble(t_map.get("v").toString());    //Temperature
+        HashMap pm10_map = (HashMap) iaqi.get("pm10");
+        Double pm10 = Double.parseDouble(pm10_map.get("v").toString());             //PM 10
 
-        HashMap p_map = (HashMap) iaqi_map.get("p");
-        Double p = Double.parseDouble(p_map.get("v").toString());
+        HashMap t_map = (HashMap) iaqi.get("t");
+        Double temperature = Double.parseDouble(t_map.get("v").toString());        //Temperature
 
-        HashMap h_map = (HashMap) iaqi_map.get("h");
-        Double h= Double.parseDouble(h_map.get("v").toString());     //Humidity
+        HashMap h_map = (HashMap) iaqi.get("h");
+        Double humidity = Double.parseDouble(h_map.get("v").toString());           //Humidity
 
-        HashMap w_map = (HashMap) iaqi_map.get("w");
-        Double w= Double.parseDouble(w_map.get("v").toString());
+        HashMap p_map = (HashMap) iaqi.get("p");
+        Double pressure = Double.parseDouble(p_map.get("v").toString());
 
-        //System.out.println("idx: "+idx+", name: " +  name +", timestamp: " +timestamp+", aqi: "+ aqi+", pm25: " +pm25+", pm10: "+ pm10+", o3: "+o3+", no2: " +no2+ ", so2"+ so2+ ", t"+ t+", p: "+ p+ ", h: "+ h+", w: " +w);
+        HashMap w_map = (HashMap) iaqi.get("w");
+        Double wind = Double.parseDouble(w_map.get("v").toString());
 
-        Cities cities = new Cities(idx, name, timestamp, aqi, pm25, pm10, o3, no2, so2, t, p, h, w);
+        Cities cities = new Cities(idx, name, timestamp, aqi, pm25, pm10, ozone, nitrogenDioxide, sulfurDioxide,
+                temperature, pressure, humidity, wind);
         citiesRepository.save(cities);
 
-        //System.out.println(cities);
         incrementStats();
         return cities;
     }
