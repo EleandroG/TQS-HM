@@ -98,6 +98,12 @@ public class CitiesController {
             } else if (idx == 6637) {
                 api = apiData("Valencia");
                 cache.setCache(api);
+            } else if (idx == 10027) {
+                api = apiData("Vigo");
+                cache.setCache(api);
+            } else if (idx == 11812) {
+                api = apiData("Valladolid");
+                cache.setCache(api);
             } else {
                 api = apiData("Madrid");
                 cache.setCache(api);

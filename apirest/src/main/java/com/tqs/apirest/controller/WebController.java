@@ -30,12 +30,34 @@ class WebController {
         return "madrid";
     }
 
-    //Porto
+    //Valencia
     @RequestMapping(method = RequestMethod.GET, value = "/valencia")
     String mapa1(Model model) throws JsonProcessingException {
-        Cities request = citiesController.citiesByIdx((long) 8373);
+        Cities request = citiesController.citiesByIdx((long) 6637);
         model.addAttribute("info", request);
         citiesController.incrementStats();
         return "valencia";
     }
+
+    //Vigo
+    @RequestMapping(method = RequestMethod.GET, value = "/vigo")
+    String mapa2(Model model) throws JsonProcessingException {
+        Cities request = citiesController.citiesByIdx((long) 10027);
+        model.addAttribute("info", request);
+        citiesController.incrementStats();
+        return "vigo";
+    }
+
+    //Valladolid
+    @RequestMapping(method = RequestMethod.GET, value = "/valladolid")
+    String mapa3(Model model) throws JsonProcessingException {
+        Cities request = citiesController.citiesByIdx((long) 11812);
+        model.addAttribute("info", request);
+        citiesController.incrementStats();
+        return "valladolid";
+    }
+
+    //unidade das grandezas ug/m3 @€€‰˙ˇ†ıı†ııøøπ€£‰¶÷[]≠][÷¶‰£€@
+    //colocar o co?
+
 }
