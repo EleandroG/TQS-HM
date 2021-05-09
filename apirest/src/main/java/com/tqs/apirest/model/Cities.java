@@ -33,13 +33,13 @@ public class Cities {
     private Double pm10;                    //PM 10
 
     @Column(nullable=true)
-    private Double o3;                      //Ozono
+    private Double ozone;                   //Ozono
 
     @Column(nullable=true)
-    private Double no2;                     //Dióxido de nitrogénio
+    private Double nitrogenDioxide;         //Dióxido de nitrogénio
 
     @Column(nullable=true)
-    private Double so2;                     //Dióxido de enxofre
+    private Double sulfurDioxide;           //Dióxido de enxofre
 
 
     // Valores temperatura
@@ -50,25 +50,26 @@ public class Cities {
     private Double pressure;                //Pressure
 
     @Column(nullable=true)
-    private Double h;                       //Humidity
+    private Double humidity;                //Humidity
 
     @Column(nullable=true)
-    private Double w;                       //Wind
+    private Double wind;                    //Wind
 
-    public Cities(Long idx, String name, String timestamp, Double airQuality, Double pm25, Double pm10, Double o3, Double no2, Double so2, Double temperature, Double pressure, Double h, Double w) {
+    public Cities(Long idx, String name, String timestamp, Double airQuality, Double pm25, Double pm10, Double ozone,
+                  Double nitrogenDioxide, Double sulfurDioxide, Double temperature, Double pressure, Double humidity, Double wind) {
         this.idx = idx;
         this.name = name;
         this.timestamp = timestamp;
         this.airQuality = airQuality;
         this.pm25 = pm25;
         this.pm10 = pm10;
-        this.o3 = o3;
-        this.no2 = no2;
-        this.so2 = so2;
+        this.ozone = ozone;
+        this.nitrogenDioxide = nitrogenDioxide;
+        this.sulfurDioxide = sulfurDioxide;
         this.temperature = temperature;
         this.pressure = pressure;
-        this.h = h;
-        this.w = w;
+        this.humidity = humidity;
+        this.wind = wind;
     }
 
     public Cities() {}
@@ -101,16 +102,16 @@ public class Cities {
         return pm10;
     }
 
-    public Double getO3() {
-        return o3;
+    public Double getOzone() {
+        return ozone;
     }
 
-    public Double getNo2() {
-        return no2;
+    public Double getNitrogenDioxide() {
+        return nitrogenDioxide;
     }
 
-    public Double getSo2() {
-        return so2;
+    public Double getSulfurDioxide() {
+        return sulfurDioxide;
     }
 
     public Double getTemperature() {
@@ -121,12 +122,12 @@ public class Cities {
         return pressure;
     }
 
-    public Double getH() {
-        return h;
+    public Double getHumidity() {
+        return humidity;
     }
 
-    public Double getW() {
-        return w;
+    public Double getWind() {
+        return wind;
     }
 
     @Override
@@ -139,13 +140,13 @@ public class Cities {
                 ", airQuality=" + airQuality +
                 ", pm25=" + pm25 +
                 ", pm10=" + pm10 +
-                ", o3=" + o3 +
-                ", no2=" + no2 +
-                ", so2=" + so2 +
+                ", ozone=" + ozone +
+                ", nitrogenDioxide=" + nitrogenDioxide +
+                ", so2=" + sulfurDioxide +
                 ", temperature=" + temperature +
                 ", p=" + pressure +
-                ", h=" + h +
-                ", w=" + w +
+                ", humidity=" + humidity +
+                ", wind=" + wind +
                 '}';
     }
 }
