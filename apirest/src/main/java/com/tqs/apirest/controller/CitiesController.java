@@ -47,7 +47,7 @@ public class CitiesController {
         // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
         incrementApiCount();
         if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cacheManager.cachenotValid(idx)){
-            cacheManager.incrementCacheMiss();
+            cacheManager.incrementMisses();
 
             // Se o pedido for Lisboa
             Cities retrieve_api;
@@ -64,7 +64,7 @@ public class CitiesController {
             return retrieve_api;
 
         } else {
-            cacheManager.incrementCacheHit();
+            cacheManager.incrementHits();
             System.out.println("-> HIT, esta em cache e TTL válido!");
             // Vai busca-lo mesmo a cache
             return cacheManager.getCityCachedById(idx);

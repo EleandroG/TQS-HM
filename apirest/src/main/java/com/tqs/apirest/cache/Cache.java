@@ -6,76 +6,93 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class Cache {
-    private Integer cache_hit;
-    private Integer cache_miss;
-    private HashMap<Long, Calendar> TTL;
-    private HashMap<Long, Cities> cities_cache;
+    
+    private HashMap<Long, Cities> cache;
+    private Integer hits;
+    private Integer misses;
+    private Integer requests;
+    private HashMap<Long, Calendar> timeToLive;
 
     public Cache() {
-        cache_miss = 0;
-        cache_hit = 0;
-        TTL = new HashMap<>();
-        cities_cache = new HashMap<>();
+        cache = new HashMap<>();
+        hits = 0;
+        misses = 0;
+        requests = 0;
+        timeToLive = new HashMap<>();
     }
 
-    public void incrementCacheHit() {
-        cache_hit++;
+    public Integer getCacheHit() {
+        return hits;
     }
 
-    public void incrementCacheMiss() {
-        cache_miss++;
+    public Integer getCacheMiss() {
+        return misses;
     }
 
-    public void setTTL(Long id) {
+    public Integer getCacheRequests() {
+        return requests;
+    }
+
+    public HashMap<Long, Cities> getCache() {
+        return cache;
+    }
+
+    public HashMap<Long, Calendar> getTimeToLive() {
+        return timeToLive;
+    }
+
+    public void incrementHits() {
+        hits++;
+    }
+
+    public void incrementMisses() {
+        misses++;
+    }
+
+    public void incrementRequests() {
+        requests++;
+    }
+
+    public void settimeToLive(Long id) {
         Calendar current_time = Calendar.getInstance();
         current_time.add(Calendar.MINUTE, 1);
-        TTL.put(id, current_time);
+        timeToLive.put(id, current_time);
     }
 
     public void setCitiesCache(Cities city) {
-        cities_cache.put(city.getIdx(), city);
-        setTTL(city.getIdx());
-        //System.out.println("CITIES CACHE HASHMAP: " + cities_cache);
-        System.out.println("CITI ADDED: " + cities_cache + "\nWITH TTL: " + TTL.get(city.getIdx()).getTime());
+        cache.put(city.getIdx(), city);
+        settimeToLive(city.getIdx());
+        //System.out.println("CITIES CACHE HASHMAP: " + cache);
+        System.out.println("CITI ADDED: " + cache + "\nWITH timeToLive: " + timeToLive.get(city.getIdx()).getTime());
     }
 
     public HashMap<Long, Cities> getCitiesCache() {
-        return cities_cache;
+        return cache;
     }
 
     public Cities getCityCachedById(Long idx){
-        return cities_cache.get(idx);
+        return cache.get(idx);
     }
 
     public boolean cachenotValid(Long idx){
         Calendar current_time = Calendar.getInstance();
-        //System.out.println("TTL HASHMAP: " + TTL.values());
-        if (current_time.before(TTL.get(idx)) || current_time.equals(TTL.get(idx))){
-            System.out.println("-- CACHE TTL VALID: " + cities_cache.get(idx).getName() + "\n\tTTL Value: " + TTL.get(idx).getTime());
+        //System.out.println("timeToLive HASHMAP: " + timeToLive.values());
+        if (current_time.before(timeToLive.get(idx)) || current_time.equals(timeToLive.get(idx))){
+            System.out.println("-- CACHE timeToLive VALID: " + cache.get(idx).getName() + "\n\ttimeToLive Value: " + timeToLive.get(idx).getTime());
             return false;
-        } else if (current_time.after(TTL.get(idx))){
-            System.out.println("-- CACHE TTL NOT VALID: " + cities_cache.get(idx).getName() + "\n\tTTL Value: " + TTL.get(idx).getTime());
-            return true;
         } else {
             return true;
         }
     }
 
-    public Integer getCacheHit() {
-        return cache_hit;
-    }
-
-    public Integer getCacheMiss() {
-        return cache_miss;
-    }
-
     @Override
     public String toString() {
         return "CacheManager{" +
-                "\ncache_hit=" + cache_hit +
-                ", \ncache_miss=" + cache_miss +
-                ", \nTTL=" + TTL +
-                ", \ncities_cache=" + cities_cache +
+                ",\ncache=" + cache +
+                " \nhits=" + hits +
+                ",\nmisses=" + misses +
+                ",\nrequests=" + requests +
+                ",\ntimeToLive=" + timeToLive +
                 '}';
     }
 }

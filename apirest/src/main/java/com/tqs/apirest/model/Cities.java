@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name="city")
 public class Cities {
 
-    // Cidade
+    //Station | City | Region
     @Id
     @GeneratedValue
     private Long id;
@@ -22,7 +22,8 @@ public class Cities {
     @Column(nullable=false)
     private Double airQuality;
 
-    // Temperatura
+
+
     @Column(nullable=true)
     private Double temperature;             //Temperature
 
@@ -37,7 +38,6 @@ public class Cities {
 
 
 
-    // Gases
     @Column(nullable=true)
     private Double nitrogenDioxide;         //Dióxido de nitrogénio
 
@@ -52,6 +52,7 @@ public class Cities {
 
     @Column(nullable=true)
     private Double pm10;                    //PM 10
+
 
 
     public Cities(Long idx, String name, String timestamp, Double airQuality,
@@ -70,6 +71,7 @@ public class Cities {
         this.wind = wind;
         this.pressure = pressure;
     }
+
 
     public Cities() {}
 
