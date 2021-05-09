@@ -26,46 +26,19 @@ public class CitiesController {
     public static int requests = 0;
     public static int stats = 0;
 
-    // TODO:
-    // - add miss e hits count
-    // - add TTL
-    @GetMapping("/cities/{idx}")
-    public Cities citiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
-        // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
-        incrementStats();
-        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
-            cache.incrementMisses();
-
-            // Se o pedido for Lisboa
-            Cities retrieve_api;
-            if (idx == 8379){
-                retrieve_api = getCityFromApi("Lisbon");
-
-                cache.setCache(retrieve_api);
-            } // Se o pedido for Madrid
-            else { // Madrid: 5725
-                retrieve_api = getCityFromApi("Madrid");
-                cache.setCache(retrieve_api);
-            }
-            System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
-            return retrieve_api;
-
-        } else {
-            cache.incrementHits();
-            System.out.println("-> HIT, esta em cache e TTL válido!");
-            // Vai busca-lo mesmo a cache
-            return cache.getCityCachedById(idx);
-        }
-    }
-
-    // Call the external api and then save to model
+    // Request the data from the API
     @GetMapping("/api/{city}")
     public Cities getCityFromApi(@PathVariable(value = "city") String city) throws JsonProcessingException {
         final String uri = "https://api.waqi.info/feed/" + city + "/?token=1c26216b610f536bd4c9b745e9372912ff8fe97d";
+
+        //
         RestTemplate restTemplate = new RestTemplate();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+
         String result = restTemplate.getForObject(uri, String.class);
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -118,6 +91,38 @@ public class CitiesController {
         //System.out.println(cities);
         incrementStats();
         return cities;
+    }
+
+    // TODO:
+    // - add miss e hits count
+    // - add TTL
+    @GetMapping("/cities/{idx}")
+    public Cities citiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
+        incrementStats();
+        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
+            cache.incrementRequests();
+            cache.incrementMisses();
+
+            // Se o pedido for Lisboa
+            Cities retrieve_api;
+            if (idx == 8379){
+                retrieve_api = getCityFromApi("Lisbon");
+
+                cache.setCache(retrieve_api);
+            } // Se o pedido for Madrid
+            else { // Madrid: 5725
+                retrieve_api = getCityFromApi("Madrid");
+                cache.setCache(retrieve_api);
+            }
+            System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
+            return retrieve_api;
+
+        } else {
+            cache.incrementHits();
+            System.out.println("-> HIT, esta em cache e TTL válido!");
+            // Vai busca-lo mesmo a cache
+            return cache.getCityCachedById(idx);
+        }
     }
 
     //To see the number of times we used the API
