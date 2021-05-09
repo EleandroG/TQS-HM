@@ -54,11 +54,11 @@ public class CitiesController {
             if (idx == 8379){
                 retrieve_api = getCityFromApi("Lisbon");
 
-                cacheManager.setCitiesCache(retrieve_api);
+                cacheManager.setCache(retrieve_api);
             } // Se o pedido for Madrid
             else { // Madrid: 5725
                 retrieve_api = getCityFromApi("Madrid");
-                cacheManager.setCitiesCache(retrieve_api);
+                cacheManager.setCache(retrieve_api);
             }
             System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
             return retrieve_api;

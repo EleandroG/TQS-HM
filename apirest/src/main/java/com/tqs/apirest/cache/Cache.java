@@ -53,15 +53,15 @@ public class Cache {
         requests++;
     }
 
-    public void settimeToLive(Long id) {
+    public void setTimeToLive(Long id) {
         Calendar current_time = Calendar.getInstance();
         current_time.add(Calendar.MINUTE, 1);
         timeToLive.put(id, current_time);
     }
 
-    public void setCitiesCache(Cities city) {
+    public void setCache(Cities city) {
         cache.put(city.getIdx(), city);
-        settimeToLive(city.getIdx());
+        setTimeToLive(city.getIdx());
         //System.out.println("CITIES CACHE HASHMAP: " + cache);
         System.out.println("CITI ADDED: " + cache + "\nWITH timeToLive: " + timeToLive.get(city.getIdx()).getTime());
     }
