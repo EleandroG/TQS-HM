@@ -1,20 +1,14 @@
 package com.tqs.apirest.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tqs.apirest.cache.Cache;
 import com.tqs.apirest.model.Cities;
 import com.tqs.apirest.repository.CitiesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 public class CitiesController {
@@ -101,10 +95,10 @@ public class CitiesController {
             if (idx == 8379){
                 api = apiData("Lisbon");
                 cache.setCache(api);
-            } else if (idx == 8373) { 
-                api = apiData("Porto");
+            } else if (idx == 6637) {
+                api = apiData("Valencia");
                 cache.setCache(api);
-            } else { // Madrid: 5725
+            } else {
                 api = apiData("Madrid");
                 cache.setCache(api);
             }

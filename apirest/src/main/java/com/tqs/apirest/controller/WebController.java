@@ -14,21 +14,28 @@ class WebController {
     @Autowired
     CitiesController citiesController = new CitiesController();
 
-    // lisbon page
     @RequestMapping(method = RequestMethod.GET, value = "/")
     String home(Model model) throws JsonProcessingException {
-        Cities pedido = citiesController.citiesByIdx((long) 8379);
-        model.addAttribute("info", pedido);
+        Cities request = citiesController.citiesByIdx((long) 8379);
+        model.addAttribute("info", request);
         citiesController.incrementStats();
         return "lisbon";
     }
 
-    // madrid page
     @RequestMapping(method = RequestMethod.GET, value = "/madrid")
     String mapa(Model model) throws JsonProcessingException {
-        Cities pedido = citiesController.citiesByIdx((long) 5725);
-        model.addAttribute("info", pedido);
+        Cities request = citiesController.citiesByIdx((long) 5725);
+        model.addAttribute("info", request);
         citiesController.incrementStats();
         return "madrid";
+    }
+
+    //Porto
+    @RequestMapping(method = RequestMethod.GET, value = "/valencia")
+    String mapa1(Model model) throws JsonProcessingException {
+        Cities request = citiesController.citiesByIdx((long) 8373);
+        model.addAttribute("info", request);
+        citiesController.incrementStats();
+        return "valencia";
     }
 }
