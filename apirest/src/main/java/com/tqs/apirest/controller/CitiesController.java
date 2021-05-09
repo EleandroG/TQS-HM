@@ -46,7 +46,7 @@ public class CitiesController {
     public Cities getCitiesById (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
         // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
         incrementApiCount();
-        if (citiesRepository.findTopByIdxOrderByIdgeratedDesc(idx) == null || cacheManager.cachenotValid(idx)){
+        if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cacheManager.cachenotValid(idx)){
             cacheManager.incrementCacheMiss();
 
             // Se o pedido for Lisboa
