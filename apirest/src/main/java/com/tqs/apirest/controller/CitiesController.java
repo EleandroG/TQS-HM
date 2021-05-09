@@ -28,7 +28,7 @@ public class CitiesController {
 
     // Request the data from the API
     @GetMapping("/api/{city}")
-    public Cities getCityFromApi(@PathVariable(value = "city") String city) throws JsonProcessingException {
+    public Cities apiData(@PathVariable(value = "city") String city) throws JsonProcessingException {
         final String uri = "https://api.waqi.info/feed/" + city + "/?token=1c26216b610f536bd4c9b745e9372912ff8fe97d";
 
         //HTTP requests on the client side
@@ -42,8 +42,8 @@ public class CitiesController {
         HashMap data = (HashMap) infos.get("data");
 
         HashMap city_map = (HashMap) data.get("city");
-        HashMap time = (HashMap) data.get("time");
         HashMap iaqi = (HashMap) data.get("iaqi");
+        HashMap time = (HashMap) data.get("time");
 
         Long idx = Long.parseLong(data.get("idx").toString());          //ID for the city | region | station
 
@@ -63,7 +63,7 @@ public class CitiesController {
         Double ozone = Double.parseDouble(o3_map.get("v").toString());              //Ozono
 
         HashMap pm25_map = (HashMap) iaqi.get("pm25");
-        Double pm25 = Double.parseDouble(pm25_map.get("v").toString());             //PM 2.5
+        Double pm25 = Double.parseDouble(pm25_map.get("v").toString());             //PM 25
 
         HashMap pm10_map = (HashMap) iaqi.get("pm10");
         Double pm10 = Double.parseDouble(pm10_map.get("v").toString());             //PM 10
@@ -84,38 +84,37 @@ public class CitiesController {
                 temperature, humidity, pressure, wind);
         citiesRepository.save(cities);
 
+        
         incrementStats();
         return cities;
     }
 
-    // TODO:
-    // - add miss e hits count
-    // - add TTL
     @GetMapping("/cities/{idx}")
     public Cities citiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
+        incrementRequests();
         incrementStats();
         if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
             cache.incrementRequests();
             cache.incrementMisses();
 
-            // Se o pedido for Lisboa
-            Cities retrieve_api;
+            Cities api;
             if (idx == 8379){
-                retrieve_api = getCityFromApi("Lisbon");
-
-                cache.setCache(retrieve_api);
-            } // Se o pedido for Madrid
-            else { // Madrid: 5725
-                retrieve_api = getCityFromApi("Madrid");
-                cache.setCache(retrieve_api);
+                api = apiData("Lisbon");
+                cache.setCache(api);
+            } else if (idx == 8373) { 
+                api = apiData("Porto");
+                cache.setCache(api);
+            } else { // Madrid: 5725
+                api = apiData("Madrid");
+                cache.setCache(api);
             }
-            System.out.println("-> MISS, nao esta em cache ou expirou TTL!");
-            return retrieve_api;
+            System.out.println("Miss! Porque não está em Cache e o Time to Live expirou");
+            return api;
 
         } else {
+            cache.incrementRequests();
             cache.incrementHits();
-            System.out.println("-> HIT, esta em cache e TTL válido!");
-            // Vai busca-lo mesmo a cache
+            System.out.println("Hit! Porque está em Cache e o Time to Live está válido");
             return cache.getCityCachedById(idx);
         }
     }
