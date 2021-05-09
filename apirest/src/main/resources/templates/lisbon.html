@@ -1,21 +1,21 @@
 <!doctype html>
 <html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Required meta tags -->
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- reference your copy Font Awesome here (from our CDN or by hosting yourself) -->
+
     <script src="https://kit.fontawesome.com/9002efc044.js" crossorigin="anonymous"></script>
 
-    <title>AirQuality</title>
+    <title>Air Quality</title>
 </head>
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" style="font-size:25px; font-height: bold;" th:href="@{/}">AirQuality <i class="fas fa-air-freshener"></i> WebApp</a>
+    <a class="navbar-brand" style="font-size:25px; font-height: bold;" th:href="@{/}">Air Quality <i class="fas fa-air-freshener"></i> WebApp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -23,7 +23,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">Lisbon <span class="sr-only">(current)</span></a>
+                <a class="nav-link" th:href="@{/home}">AQ1 </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/lisbon}">Lisbon <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/madrid}">Madrid</a>

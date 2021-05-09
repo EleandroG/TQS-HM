@@ -14,12 +14,9 @@ class WebController {
     @Autowired
     CitiesController citiesController = new CitiesController();
 
-    @RequestMapping(method = RequestMethod.GET, value = "/")
-    String home(Model model) throws JsonProcessingException {
-        Cities request = citiesController.citiesByIdx((long) 8379);
-        model.addAttribute("info", request);
-        citiesController.incrementStats();
-        return "lisbon";
+    @RequestMapping(method = RequestMethod.GET, value = "/home")
+    String homePage(Model model) throws JsonProcessingException {
+        return "home";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/madrid")
@@ -28,6 +25,15 @@ class WebController {
         model.addAttribute("info", request);
         citiesController.incrementStats();
         return "madrid";
+    }
+
+    //Lisboa
+    @RequestMapping(method = RequestMethod.GET, value = "/lisbon")
+    String mapa4(Model model) throws JsonProcessingException {
+        Cities request = citiesController.citiesByIdx((long) 8379);
+        model.addAttribute("info", request);
+        citiesController.incrementStats();
+        return "lisbon";
     }
 
     //Valencia
