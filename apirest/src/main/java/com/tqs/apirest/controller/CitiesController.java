@@ -21,18 +21,18 @@ public class CitiesController {
     
     @Autowired
     CitiesRepository citiesRepository;
+
     Cache cache = new Cache();
-
-    public static int ApiStats = 0;
-
+    public static int requests = 0;
+    public static int stats = 0;
 
     // TODO:
     // - add miss e hits count
     // - add TTL
     @GetMapping("/cities/{idx}")
-    public Cities getCitiesById (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
+    public Cities getCitiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
         // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
-        incrementApiCount();
+        incrementStats();
         if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
             cache.incrementMisses();
 
@@ -116,23 +116,32 @@ public class CitiesController {
         citiesRepository.save(cities);
 
         //System.out.println(cities);
-        incrementApiCount();
+        incrementStats();
         return cities;
     }
 
-    // Return the number of calls to my api
+    //To see the number of times we used the API
     @GetMapping("/api/stats")
-    public String getApiStats(){
-        return "Calls to Api on this session: "+ ApiStats;
+    public String getStats(){
+        return "Stats (Number of times): "+ stats;
     }
 
+    @GetMapping("/api/requests")
+    public String getRequests(){
+        return "Requests: "+ requests;
+    }
+
+    //To see the cache of a certain region | city | station
     @GetMapping("/cache")
-    public String returnCache(){
+    public String Cache(){
         return cache.toString();
     }
 
-    public void incrementApiCount(){
-        ApiStats++;
+    public void incrementRequests(){
+        requests++;
     }
 
+    public void incrementStats(){
+        stats++;
+    }
 }
