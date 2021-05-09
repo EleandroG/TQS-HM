@@ -41,17 +41,17 @@ public class CitiesController {
         HashMap infos = mapper.readValue(result, HashMap.class);
         HashMap data = (HashMap) infos.get("data");
 
-        //System.out.println(data);
-
         HashMap city_map = (HashMap) data.get("city");
         HashMap time = (HashMap) data.get("time");
         HashMap iaqi = (HashMap) data.get("iaqi");
 
         Long idx = Long.parseLong(data.get("idx").toString());          //ID for the city | region | station
-        String name = city_map.get("name").toString();                  //Name of city | region | station
-        String timestamp = time.get("s").toString();                    //Timestamp
-        Double aqi = Double.parseDouble(data.get("aqi").toString());    //Air Quality Information
 
+        String name = city_map.get("name").toString();                  //Name of city | region | station
+
+        String timestamp = time.get("s").toString();                    //Timestamp
+
+        Double aqi = Double.parseDouble(data.get("aqi").toString());    //Air Quality Information
 
         HashMap no2_map = (HashMap) iaqi.get("no2");
         Double nitrogenDioxide = Double.parseDouble(no2_map.get("v").toString());   //Dióxido de nitrogénio
@@ -75,13 +75,13 @@ public class CitiesController {
         Double humidity = Double.parseDouble(h_map.get("v").toString());           //Humidity
 
         HashMap p_map = (HashMap) iaqi.get("p");
-        Double pressure = Double.parseDouble(p_map.get("v").toString());
+        Double pressure = Double.parseDouble(p_map.get("v").toString());           //Pressure
 
         HashMap w_map = (HashMap) iaqi.get("w");
-        Double wind = Double.parseDouble(w_map.get("v").toString());
+        Double wind = Double.parseDouble(w_map.get("v").toString());               //Wind
 
-        Cities cities = new Cities(idx, name, timestamp, aqi, pm25, pm10, ozone, nitrogenDioxide, sulfurDioxide,
-                temperature, pressure, humidity, wind);
+        Cities cities = new Cities(idx, name, timestamp, aqi, nitrogenDioxide, sulfurDioxide, ozone, pm25, pm10,
+                temperature, humidity, pressure, wind);
         citiesRepository.save(cities);
 
         incrementStats();
