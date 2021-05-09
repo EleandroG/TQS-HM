@@ -7,10 +7,12 @@ import javax.persistence.*;
 public class Cities {
 
     //Station | City | Region
+    //Id Generated
     @Id
     @GeneratedValue
     private Long id;
 
+    //Id that identifies a certain station | city | region
     private Long idx;
 
     @Column(nullable=false)
@@ -134,21 +136,21 @@ public class Cities {
 
     @Override
     public String toString() {
-        return "Cities{" +
-                "id=" + id +
-                ", idx=" + idx +
-                ", name='" + name + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", airQuality=" + airQuality +
-                ", nitrogenDioxide=" + nitrogenDioxide +
-                ", so2=" + sulfurDioxide +
-                ", ozone=" + ozone +
-                ", pm25=" + pm25 +
-                ", pm10=" + pm10 +
-                ", temperature=" + temperature +
-                ", humidity=" + humidity +
-                ", wind=" + wind +
-                ", p=" + pressure +
+        return "City {" +
+                "id =" + id +
+                ", idx =" + idx +
+                ", Name ='" + name + '\'' +
+                ", Timestamp='" + timestamp + '\'' +
+                ", Air Quality=" + airQuality +
+                ", Nitrogen Dioxide (NO2)=" + nitrogenDioxide +
+                ", Sulfur Dioxide (SO2) =" + sulfurDioxide +
+                ", Ozone =" + ozone +
+                ", PM25=" + pm25 +
+                ", PM10=" + pm10 +
+                ", Temperature=" + temperature +
+                ", Humidity=" + humidity +
+                ", Wind=" + wind +
+                ", Pressure=" + pressure +
                 '}';
     }
 }
