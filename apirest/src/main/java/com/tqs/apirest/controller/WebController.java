@@ -17,7 +17,7 @@ class WebController {
     // lisbon page
     @RequestMapping(method = RequestMethod.GET, value = "/")
     String home(Model model) throws JsonProcessingException {
-        Cities pedido = citiesController.getCitiesByIdx((long) 8379);
+        Cities pedido = citiesController.citiesByIdx((long) 8379);
         model.addAttribute("info", pedido);
         citiesController.incrementStats();
         return "lisbon";
@@ -26,7 +26,7 @@ class WebController {
     // madrid page
     @RequestMapping(method = RequestMethod.GET, value = "/madrid")
     String mapa(Model model) throws JsonProcessingException {
-        Cities pedido = citiesController.getCitiesByIdx((long) 5725);
+        Cities pedido = citiesController.citiesByIdx((long) 5725);
         model.addAttribute("info", pedido);
         citiesController.incrementStats();
         return "madrid";

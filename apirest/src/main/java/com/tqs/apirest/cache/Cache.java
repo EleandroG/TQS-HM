@@ -50,9 +50,9 @@ public class Cache {
     }
 
     public void setTimeToLive(Long id) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 1);
-        timeToLive.put(id, calendar);
+        Calendar timeZone = Calendar.getInstance();
+        timeZone.add(Calendar.MINUTE, 20);
+        timeToLive.put(id, timeZone);
     }
 
     public void setCache(Cities city) {
@@ -76,10 +76,11 @@ public class Cache {
 
     //Method to confirm if this is a cache of a city | region | station
     public boolean isCache(Long idx){
-        Calendar calendar = Calendar.getInstance();
+        Calendar timeZone = Calendar.getInstance();
 
-        if (calendar.before(timeToLive.get(idx)) || calendar.equals(timeToLive.get(idx))){
-            System.out.println("-- CACHE timeToLive VALID: " + cache.get(idx).getName() + "\n\ttimeToLive Value: " + timeToLive.get(idx).getTime());
+        if (timeZone.before(timeToLive.get(idx)) || timeZone.equals(timeToLive.get(idx))){
+            System.out.println("This Cache: " + cache.get(idx).getName() + "\n\t is still valid because Time To Live is: " +
+                    timeToLive.get(idx).getTime());
             return false;
         } else {
             return true;
@@ -88,12 +89,12 @@ public class Cache {
 
     @Override
     public String toString() {
-        return "CacheManager{" +
-                ",\ncache=" + cache +
-                " \nhits=" + hits +
-                ",\nmisses=" + misses +
-                ",\nrequests=" + requests +
-                ",\ntimeToLive=" + timeToLive +
+        return "Cache {" +
+                ",\nCache=" + cache +
+                " \nHits=" + hits +
+                ",\nMisses=" + misses +
+                ",\nRequests=" + requests +
+                ",\nTime To Live=" + timeToLive +
                 '}';
     }
 }

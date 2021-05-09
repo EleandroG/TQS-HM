@@ -30,7 +30,7 @@ public class CitiesController {
     // - add miss e hits count
     // - add TTL
     @GetMapping("/cities/{idx}")
-    public Cities getCitiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
+    public Cities citiesByIdx (@PathVariable(value = "idx") Long idx) throws JsonProcessingException {
         // SE nao encontrar nada OU SE o que encontrar já não estiver c/ TTL
         incrementStats();
         if (citiesRepository.findTopByIdxOrderByIdDesc(idx) == null || cache.isCache(idx)){
