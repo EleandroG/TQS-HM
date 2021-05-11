@@ -1,77 +1,64 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <script src="https://kit.fontawesome.com/9002efc044.js" crossorigin="anonymous"></script>
-
-    <title>Air Quality</title>
-</head>
+<title>Weather App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+    body,h1 {font-family: "Raleway", sans-serif}
+    body, html {height: 100%}
+    .bgimg {
+        background-image: url('https://wallpaperaccess.com/full/2262130.jpg');
+        min-height: 100%;
+        background-position: center;
+        background-size: cover;
+    }
+</style>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" style="font-size:25px; font-height: bold;" th:href="@{/}">Air Quality <i class="fas fa-air-freshener"></i> WebApp</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/home}"> Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/madrid}">Madrid</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/valencia}">Valencia</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/vigo}">Vigo</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/valladolid}">Valladolid</a>
-            </li>
-        </ul>
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+    <div class="w3-display-topleft w3-padding-large w3-xlarge">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" style="font-size:25px; font-height: bold;">Weather WebApp: Air Quality</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/home}"> Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/madrid}">Madrid</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/valencia}">Valencia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/vigo}">Vigo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/valladolid}">Valladolid</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/bilbao}"> Bilbao </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/corunha}"> Coruña </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
-</nav>
-
-<!-- Page Content -->
-<div class="container">
-
-    <!-- Call to Action Well -->
-    <div class="card text-white bg-secondary bg-success  my-5 py-4 text-center" style="background-color: #fa50a4;">
-        <div class="card-body">
-            <p class="text-white m-0" style="font-size: 40px;">HOME</p>
-        </div>
-    </div>
-
-    <!-- Content Row -->
-    <div align="center" style="background-image: url('http://hd.wallpaperswide.com/thumbs/my_favorite_weather-t2.jpg'); height:100vh">
-        <h1>
-            <font face="Copperplate" size="22">
-                <hr>
-                <img src="http://hd.wallpaperswide.com/thumbs/my_favorite_weather-t2.jpg">
-            </font>
-        </h1>
+    <div class="w3-display-middle">
+        <h1 class="w3-jumbo w3-animate-top"> HOME </h1>
+        <hr class="w3-border-grey" style="margin:auto;width:40%">
+        <p class="w3-large w3-center"></p>
     </div>
 
-
-    <div class="text-center">
-        <p>Air Quality Home Page - Copyright &copy; AQ</p>
+    <div class="w3-display-bottomleft w3-padding-large">
+        Powered by <a href="https://waqi.info/pt/" target="_blank"> WAQI </a>
     </div>
 </div>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 </body>
 </html>

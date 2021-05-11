@@ -53,6 +53,9 @@ public class CitiesController {
         HashMap so2_map = (HashMap) iaqi.get("so2");
         Double sulfurDioxide = Double.parseDouble(so2_map.get("v").toString());     //Dióxido de enxofre
 
+        HashMap co_map = (HashMap) iaqi.get("co");
+        Double carbonMonoxide = Double.parseDouble(so2_map.get("v").toString());     //Monóxido de Carbono
+
         HashMap o3_map = (HashMap) iaqi.get("o3");
         Double ozone = Double.parseDouble(o3_map.get("v").toString());              //Ozono
 
@@ -74,11 +77,11 @@ public class CitiesController {
         HashMap w_map = (HashMap) iaqi.get("w");
         Double wind = Double.parseDouble(w_map.get("v").toString());               //Wind
 
-        Cities cities = new Cities(idx, name, timestamp, aqi, nitrogenDioxide, sulfurDioxide, ozone, pm25, pm10,
+        Cities cities = new Cities(idx, name, timestamp, aqi, nitrogenDioxide, sulfurDioxide, carbonMonoxide, ozone, pm25, pm10,
                 temperature, humidity, pressure, wind);
         citiesRepository.save(cities);
 
-
+        incrementRequests();
         incrementStats();
         return cities;
     }
@@ -92,10 +95,7 @@ public class CitiesController {
             cache.incrementMisses();
 
             Cities api;
-            if (idx == 8379){
-                api = apiData("Lisbon");
-                cache.setCache(api);
-            } else if (idx == 6637) {
+            if (idx == 6637) {
                 api = apiData("Valencia");
                 cache.setCache(api);
             } else if (idx == 10027) {
@@ -103,6 +103,12 @@ public class CitiesController {
                 cache.setCache(api);
             } else if (idx == 11812) {
                 api = apiData("Valladolid");
+                cache.setCache(api);
+            } else if (idx == 6732) {
+                api = apiData("Bilbao");
+                cache.setCache(api);
+            } else if (idx == 5754) {
+                api = apiData("Coruña");
                 cache.setCache(api);
             } else {
                 api = apiData("Madrid");

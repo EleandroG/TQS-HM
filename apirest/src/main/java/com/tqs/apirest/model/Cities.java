@@ -47,6 +47,9 @@ public class Cities {
     private Double sulfurDioxide;           //Dióxido de enxofre
 
     @Column(nullable=true)
+    private Double  carbonMonoxide ;        //Monóxido de Carbono
+
+    @Column(nullable=true)
     private Double ozone;                   //Ozono
 
     @Column(nullable=true)
@@ -58,13 +61,14 @@ public class Cities {
 
 
     public Cities(Long idx, String name, String timestamp, Double airQuality,
-                  Double nitrogenDioxide, Double sulfurDioxide, Double ozone, Double pm25, Double pm10, Double temperature, Double humidity, Double wind, Double pressure) {
+                  Double nitrogenDioxide, Double sulfurDioxide, Double carbonMonoxide, Double ozone, Double pm25, Double pm10, Double temperature, Double humidity, Double wind, Double pressure) {
         this.idx = idx;
         this.name = name;
         this.timestamp = timestamp;
         this.airQuality = airQuality;
         this.nitrogenDioxide = nitrogenDioxide;
         this.sulfurDioxide = sulfurDioxide;
+        this.carbonMonoxide = carbonMonoxide;
         this.ozone = ozone;
         this.pm25 = pm25;
         this.pm10 = pm10;
@@ -103,6 +107,10 @@ public class Cities {
 
     public Double getSulfurDioxide() {
         return sulfurDioxide;
+    }
+
+    public Double getCarbonMonoxide() {
+        return carbonMonoxide;
     }
 
     public Double getOzone() {
@@ -144,6 +152,7 @@ public class Cities {
                 ", Air Quality=" + airQuality +
                 ", Nitrogen Dioxide (NO2)=" + nitrogenDioxide +
                 ", Sulfur Dioxide (SO2) =" + sulfurDioxide +
+                ", Carbon Monoxide (SO2) =" + carbonMonoxide +
                 ", Ozone =" + ozone +
                 ", PM25=" + pm25 +
                 ", PM10=" + pm10 +
