@@ -49,7 +49,7 @@ public class CitiesControllerTest {
 
         //Erro
         @Test
-        public void stats(){
+        public void stats() {
             CitiesController citiesController = new CitiesController();
             citiesController.incrementRequests();
             citiesController.incrementStats();
@@ -62,5 +62,11 @@ public class CitiesControllerTest {
         @Test
         public void cache(){
             assertEquals(cache.toString(), citiesController.Cache());
+        }
+
+        @Test
+        public void getAllCities() {
+            List<Cities> cities = citiesController.getAllCities();
+            assertEquals(cities.size(), citiesRepository.findAll().size());
         }
 }

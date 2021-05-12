@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class CitiesController {
@@ -125,10 +126,17 @@ public class CitiesController {
         }
     }
 
+    @GetMapping("/cities")
+    public List<Cities> getAllCities() {
+        incrementRequests();
+        incrementStats();
+        return citiesRepository.findAll();
+    }
+
     //To see the number of times we used the API
     @GetMapping("/api/stats")
     public String getStats(){
-        return "Stats (Number of times): "+ stats;
+        return "Stats (Number of times): "+ stats + "\nHits: " + cache.getCacheHit() + "\nMisses: " + cache.getCacheMiss();
     }
 
     @GetMapping("/api/requests")

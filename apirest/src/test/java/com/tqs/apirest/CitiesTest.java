@@ -27,10 +27,9 @@ public class CitiesTest {
     }
 
     @Test
-    public void assertNotNull(){
+    public void notNull(){
         Cities city_found = citiesRepository.findByIdx(11812);
         System.out.println(city_found);
         assertThat(city_found).isNotNull();
     }
-
 }
